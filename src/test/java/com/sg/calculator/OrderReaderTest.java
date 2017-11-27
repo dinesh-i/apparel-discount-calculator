@@ -1,4 +1,4 @@
-package com.sg.calculator.util;
+package com.sg.calculator;
 
 import static org.junit.Assert.assertEquals;
 

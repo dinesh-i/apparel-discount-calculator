@@ -1,4 +1,4 @@
-package com.sg.calculator.util;
+package com.sg.calculator;
 
 import static org.junit.Assert.assertEquals;
 
@@ -14,6 +14,7 @@ import com.sg.calculator.reader.BrandDiscountReader;
 import com.sg.calculator.reader.CatalogueReader;
 import com.sg.calculator.reader.CategoriesReader;
 import com.sg.calculator.reader.OrderReader;
+import com.sg.calculator.util.Node;
 
 public class DiscountCalculatorTest {
 

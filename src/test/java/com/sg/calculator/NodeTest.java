@@ -1,9 +1,11 @@
-package com.sg.calculator.util;
+package com.sg.calculator;
 
 import static org.junit.Assert.assertEquals;
 
 import org.junit.Before;
 import org.junit.Test;
+
+import com.sg.calculator.util.Node;
 
 public class NodeTest {
 
