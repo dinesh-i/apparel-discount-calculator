@@ -21,7 +21,7 @@ public class BrandDiscountReaderTest {
 	}
 
 	@Test
-	public void shouldMatchTheBrandAndAssoicatedDiscount() {
+	public void shouldMatchTheBrandAndAssociatedDiscount() {
 		assertEquals(10, brandDiscounts.get("Wrangler").intValue());
 		assertEquals(20, brandDiscounts.get("Arrow").intValue());
 		assertEquals(60, brandDiscounts.get("Vero Moda").intValue());

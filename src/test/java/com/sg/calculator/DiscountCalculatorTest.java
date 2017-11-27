@@ -8,7 +8,6 @@ import java.util.Map;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.sg.calculator.DiscountCalculator;
 import com.sg.calculator.domain.Product;
 import com.sg.calculator.reader.BrandDiscountReader;
 import com.sg.calculator.reader.CatalogueReader;
@@ -48,7 +47,7 @@ public class DiscountCalculatorTest {
 
 	// @Ignore
 	@Test
-	public void test() {
+	public void verifyDiscountedPrice() {
 		List<Integer> discountedPriceValues = discountCalculator.getDiscountedPrices(orders, products, categories, brandDiscounts);
 		assertEquals(560, discountedPriceValues.get(0).intValue());
 		assertEquals(3860, discountedPriceValues.get(1).intValue());

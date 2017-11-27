@@ -21,7 +21,7 @@ public class OrderReaderTest {
 	}
 
 	@Test
-	public void test() {
+	public void shouldReadOrders() {
 		assertEquals(3, result.size());
 		assertEquals(1, result.get(0).size());
 		assertEquals(4, result.get(1).size());

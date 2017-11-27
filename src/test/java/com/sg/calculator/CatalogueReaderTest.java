@@ -23,7 +23,7 @@ public class CatalogueReaderTest {
 	}
 
 	@Test
-	public void test() {
+	public void shouldReadProducts() {
 		assertEquals(5, products.size());
 		assertEquals(1, products.get(0).getId().intValue());
 		assertEquals("UCB", products.get(4).getBrandName());

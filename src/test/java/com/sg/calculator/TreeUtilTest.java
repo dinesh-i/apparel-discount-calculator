@@ -28,7 +28,7 @@ public class TreeUtilTest {
 	}
 
 	@Test
-	public void test() {
+	public void shouldParseTheTreeStructure() {
 		assertEquals(rootNode, treeUtil.getNode(0, rootNode));
 		assertEquals(mensNode, treeUtil.getNode(1, rootNode));
 		assertEquals(womensNode, treeUtil.getNode(6, rootNode));
