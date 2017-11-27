@@ -9,14 +9,17 @@ import java.util.stream.Stream;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Component;
 
 import com.sg.calculator.domain.Product;
 
-public class CatalogueReader {
+@Component
+public class CatalogueReader implements Reader {
 
 	private static final Logger logger = LoggerFactory.getLogger(CatalogueReader.class);
 
-	public static List<Product> read(String catalogueFileName) {
+	@Override
+	public List<Product> read(String catalogueFileName) {
 
 		try (Stream<String> stream = Files.lines(Paths.get(catalogueFileName)).skip(1)) {
 

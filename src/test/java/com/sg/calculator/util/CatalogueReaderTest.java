@@ -13,11 +13,12 @@ import com.sg.calculator.reader.CatalogueReader;
 public class CatalogueReaderTest {
 
 	private List<Product> products;
+	private CatalogueReader catalogueReader;
 
 	@Before
 	public void setUp() throws Exception {
-
-		products = CatalogueReader.read("src/test/resources/product-catalogue.csv");
+		catalogueReader = new CatalogueReader();
+		products = catalogueReader.read("src/test/resources/product-catalogue.csv");
 
 	}
 

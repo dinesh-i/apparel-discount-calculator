@@ -12,10 +12,12 @@ import com.sg.calculator.reader.CategoriesReader;
 public class CategoriesReaderTest {
 
 	private Node categories;
+	private CategoriesReader categoriesReader;
 
 	@Before
 	public void setUp() throws Exception {
-		categories = CategoriesReader.read("src/main/resources/categories-and-discounts.csv");
+		categoriesReader = new CategoriesReader();
+		categories = categoriesReader.read("src/main/resources/categories-and-discounts.csv");
 	}
 
 	@Test

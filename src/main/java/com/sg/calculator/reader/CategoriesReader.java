@@ -10,15 +10,18 @@ import java.util.stream.Stream;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Component;
 
 import com.sg.calculator.util.Node;
 import com.sg.calculator.util.TreeUtil;
 
-public class CategoriesReader {
+@Component
+public class CategoriesReader implements Reader {
 
 	private static final Logger logger = LoggerFactory.getLogger(CategoriesReader.class);
 
-	public static Node read(String categoriesFileName) {
+	@Override
+	public Node read(String categoriesFileName) {
 
 		Node rootNode = new Node(0, "Root", null, 0);
 		TreeUtil treeUtil = new TreeUtil(rootNode);

@@ -11,11 +11,13 @@ import com.sg.calculator.reader.OrderReader;
 
 public class OrderReaderTest {
 
-	List<List<Integer>> result;
+	private List<List<Integer>> result;
+	private OrderReader orderReader;
 
 	@Before
 	public void setUp() throws Exception {
-		result = OrderReader.read("src/test/resources/order.csv");
+		orderReader = new OrderReader();
+		result = orderReader.read("src/test/resources/order.csv");
 	}
 
 	@Test

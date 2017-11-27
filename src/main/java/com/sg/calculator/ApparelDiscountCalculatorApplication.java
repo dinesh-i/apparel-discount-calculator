@@ -13,20 +13,66 @@ import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.util.CollectionUtils;
 
 @SpringBootApplication
-public class ApparelDiscountCalculatorApplication {
+public class ApparelDiscountCalculatorApplication implements CommandLineRunner {
 
 	private static final String DEFAULT_BRANDS_AND_DISCOUNTS_FILE = "src/main/resources/brands-and-discounts.csv";
 	private static final String DEFAULT_CATEGORIES_AND_DISCOUNTS_FILE = "src/main/resources/categories-and-discounts.csv";
 	private static final String DEFAULT_DISCOUNTED_PRICES_FILE = "discounted-prices.txt";
 	private static final String OVERWRITE_OUTPUT_FILE_SHORT_NOTATION = "f";
 
+	private DiscountCalculator discountCalculator;
+
+	@Autowired
+	public void setDiscountCalculator(DiscountCalculator discountCalculator) {
+		this.discountCalculator = discountCalculator;
+	}
+
 	public static void main(String[] args) {
 		SpringApplication.run(ApparelDiscountCalculatorApplication.class, args);
+	}
+
+	private static Options getOptions() {
+		Options options = new Options();
+
+		Option orderFilePath = getOption("o", "orders", true, "Order file", true);
+		options.addOption(orderFilePath);
+
+		Option productCatalogueFilePath = getOption("p", "products", true, "Product catalogue File", true);
+		options.addOption(productCatalogueFilePath);
+
+		Option categoriesFilePath = getOption("c", "categories-and-discounts", true,
+				"Categories and discounts File. If this field is not provided then default category discount file will be used.", false);
+		options.addOption(categoriesFilePath);
+
+		Option brandFilePath = getOption("b", "brands-and-discounts", true,
+				"Brands and discounts file. If this field is not provided then default brand discount file will be used.", false);
+		options.addOption(brandFilePath);
+
+		Option outputFilePath = getOption("t", "target-file", true,
+				"Output file with the discounted prices. If this field is not provided then defaults to a file named discounted-prices.txt in current directory",
+				false);
+		options.addOption(outputFilePath);
+
+		Option overwrite = getOption(OVERWRITE_OUTPUT_FILE_SHORT_NOTATION, "overwrite-output-file", false, "Overwrite output file if it already exists", false);
+		options.addOption(overwrite);
+		return options;
+	}
+
+	private static Option getOption(String shortOption, String longOption, boolean hasArg, String description, boolean isRequired) {
+		Option overwrite = new Option(shortOption, longOption, hasArg, description);
+		overwrite.setRequired(isRequired);
+		return overwrite;
+	}
+
+	@Override
+	public void run(String... args) throws Exception {
 
 		// Define the options
 		Options options = getOptions();
@@ -75,7 +121,7 @@ public class ApparelDiscountCalculatorApplication {
 		}
 
 		// Calculate the discount price
-		List<Integer> discountPrices = DiscountCalculator.getDiscountPrices(orderFile, productCatalogueFile, categoriesAndDiscountsFile,
+		List<Integer> discountPrices = discountCalculator.getDiscountPrices(orderFile, productCatalogueFile, categoriesAndDiscountsFile,
 				brandsAndDiscountsFile);
 
 		// Print the discount price in console
@@ -100,38 +146,5 @@ public class ApparelDiscountCalculatorApplication {
 			return;
 		}
 
-	}
-
-	private static Options getOptions() {
-		Options options = new Options();
-
-		Option orderFilePath = getOption("o", "orders", true, "Order file", true);
-		options.addOption(orderFilePath);
-
-		Option productCatalogueFilePath = getOption("p", "products", true, "Product catalogue File", true);
-		options.addOption(productCatalogueFilePath);
-
-		Option categoriesFilePath = getOption("c", "categories-and-discounts", true,
-				"Categories and discounts File. If this field is not provided then default category discount file will be used.", false);
-		options.addOption(categoriesFilePath);
-
-		Option brandFilePath = getOption("b", "brands-and-discounts", true,
-				"Brands and discounts file. If this field is not provided then default brand discount file will be used.", false);
-		options.addOption(brandFilePath);
-
-		Option outputFilePath = getOption("t", "target-file", true,
-				"Output file with the discounted prices. If this field is not provided then defaults to a file named discounted-prices.txt in current directory",
-				false);
-		options.addOption(outputFilePath);
-
-		Option overwrite = getOption(OVERWRITE_OUTPUT_FILE_SHORT_NOTATION, "overwrite-output-file", false, "Overwrite output file if it already exists", false);
-		options.addOption(overwrite);
-		return options;
-	}
-
-	private static Option getOption(String shortOption, String longOption, boolean hasArg, String description, boolean isRequired) {
-		Option overwrite = new Option(shortOption, longOption, hasArg, description);
-		overwrite.setRequired(isRequired);
-		return overwrite;
 	}
 }

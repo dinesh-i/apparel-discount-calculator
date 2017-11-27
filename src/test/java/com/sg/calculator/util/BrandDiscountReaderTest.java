@@ -12,10 +12,12 @@ import com.sg.calculator.reader.BrandDiscountReader;
 public class BrandDiscountReaderTest {
 
 	private Map<String, Integer> brandDiscounts;
+	private BrandDiscountReader brandDiscountReader;
 
 	@Before
 	public void setUp() throws Exception {
-		brandDiscounts = BrandDiscountReader.read("src/main/resources/brands-and-discounts.csv");
+		brandDiscountReader = new BrandDiscountReader();
+		brandDiscounts = brandDiscountReader.read("src/main/resources/brands-and-discounts.csv");
 	}
 
 	@Test

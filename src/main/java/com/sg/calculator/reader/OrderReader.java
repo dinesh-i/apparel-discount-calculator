@@ -13,14 +13,12 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 @Component
-public class OrderReader
-// implements Reader
-{
+public class OrderReader implements Reader {
 
 	private static final Logger logger = LoggerFactory.getLogger(BrandDiscountReader.class);
 
-	// @Override
-	public static List<List<Integer>> read(String orderFileName) {
+	@Override
+	public List<List<Integer>> read(String orderFileName) {
 
 		try (Stream<String> stream = Files.lines(Paths.get(orderFileName)).skip(1)) {
 

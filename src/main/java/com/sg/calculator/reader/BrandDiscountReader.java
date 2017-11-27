@@ -9,12 +9,15 @@ import java.util.stream.Stream;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Component;
 
-public class BrandDiscountReader {
+@Component
+public class BrandDiscountReader implements Reader {
 
 	private static final Logger logger = LoggerFactory.getLogger(BrandDiscountReader.class);
 
-	public static Map<String, Integer> read(String fileName) {
+	@Override
+	public Map<String, Integer> read(String fileName) {
 		try (Stream<String> stream = Files.lines(Paths.get(fileName)).filter(line -> !line.startsWith("#"))) {
 			Map<String, Integer> result = stream.map(line -> line.split(","))
 					.collect(Collectors.toMap(splittedStr -> splittedStr[0], splittedStr -> Integer.parseInt(splittedStr[1])));
