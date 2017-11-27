@@ -7,32 +7,30 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.sg.calculator.domain.Product;
 
 public class CatalogueReader {
+
+	private static final Logger logger = LoggerFactory.getLogger(CatalogueReader.class);
 
 	public static List<Product> read(String catalogueFileName) {
 
 		try (Stream<String> stream = Files.lines(Paths.get(catalogueFileName)).skip(1)) {
 
-			// stream.forEach(System.out::println);
-
-			List<Product> result = stream.map(line ->
-			// {
-			// String[] productElements = line.split(",");
-			// new Product(Integer.parseInt(productElements[0], productElements[1],
-			// productElements[2], Integer.parseInt(productElements[3]);
-			new Product(Integer.parseInt(line.split(",")[0]), line.split(",")[1].trim(), line.split(",")[2].trim(), Integer.parseInt(line.split(",")[3]))
-			// }
-			).collect(Collectors.toList());
+			List<Product> result = stream.map(line -> new Product(Integer.parseInt(line.split(",")[0]), line.split(",")[1].trim(), line.split(",")[2].trim(),
+					Integer.parseInt(line.split(",")[3]))).collect(Collectors.toList());
 
 			return result;
 
 		} catch (IOException e) {
 			e.printStackTrace();
+			logger.error("Exception[%s] in reading the catalogue file", e.getMessage());
+			throw new RuntimeException(e);
 		}
 
-		return null;
 	}
 
 }

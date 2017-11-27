@@ -24,11 +24,13 @@ public class DiscountCalculator {
 				Product product = getProduct(productId, products);
 				if (null == product)
 					throw new RuntimeException("Product doesn't exist");
+
+				// Compute brand discount
 				int brandDiscount = 0, categoryDiscount = 0, maxAncestorCategoryDiscount = 0;
 				if (null != brandDiscounts.get(product.getBrandName()))
 					brandDiscount = brandDiscounts.get(product.getBrandName()).intValue();
 
-				// Assign category and ancestor discounts
+				// Compute category and ancestor discounts
 				Node category = TreeUtil.getNode(product.getCategory(), categories);
 				if (null != category) {
 					categoryDiscount = category.getDiscountPercentage();

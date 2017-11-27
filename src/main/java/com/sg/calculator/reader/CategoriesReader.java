@@ -8,10 +8,15 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.sg.calculator.util.Node;
 import com.sg.calculator.util.TreeUtil;
 
 public class CategoriesReader {
+
+	private static final Logger logger = LoggerFactory.getLogger(CategoriesReader.class);
 
 	public static Node read(String categoriesFileName) {
 
@@ -19,17 +24,18 @@ public class CategoriesReader {
 		TreeUtil treeUtil = new TreeUtil(rootNode);
 
 		try (Stream<String> stream = Files.lines(Paths.get(categoriesFileName)).filter(line -> !line.startsWith("#"))) {
-			// TODO: Read only the root node. Change the below logic
 			List<Node> result = stream.map(line -> Arrays.asList(line.split(","))).map(stringList -> treeUtil.createNode(stringList))
 					.collect(Collectors.toList());
+			logger.debug("construced the node tree [%s]", result);
 
 			return rootNode;
 
 		} catch (IOException e) {
 			e.printStackTrace();
+			logger.error("Exception[%s] in reading the categories file", e.getMessage());
+			throw new RuntimeException(e);
 		}
 
-		return null;
 	}
 
 }

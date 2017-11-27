@@ -23,39 +23,18 @@ public class ApparelDiscountCalculatorApplication {
 	private static final String DEFAULT_BRANDS_AND_DISCOUNTS_FILE = "src/main/resources/brands-and-discounts.csv";
 	private static final String DEFAULT_CATEGORIES_AND_DISCOUNTS_FILE = "src/main/resources/categories-and-discounts.csv";
 	private static final String DEFAULT_DISCOUNTED_PRICES_FILE = "discounted-prices.txt";
+	private static final String OVERWRITE_OUTPUT_FILE_SHORT_NOTATION = "f";
 
 	public static void main(String[] args) {
 		SpringApplication.run(ApparelDiscountCalculatorApplication.class, args);
 
-		Options options = new Options();
-
-		Option orderFilePath = new Option("o", "orders", true, "Order file");
-		orderFilePath.setRequired(true);
-		options.addOption(orderFilePath);
-
-		Option productCatalogueFilePath = new Option("p", "products", true, "Product catalogue File");
-		productCatalogueFilePath.setRequired(true);
-		options.addOption(productCatalogueFilePath);
-
-		Option categoriesFilePath = new Option("c", "categories-and-discounts", true, "Categories and discounts File");
-		categoriesFilePath.setRequired(false);
-		options.addOption(categoriesFilePath);
-
-		Option brandFilePath = new Option("b", "brands-and-discounts", true, "Brands and discounts file");
-		brandFilePath.setRequired(false);
-		options.addOption(brandFilePath);
-
-		Option outputFilePath = new Option("t", "target-file", true, "Output file with the discounted prices");
-		outputFilePath.setRequired(false);
-		options.addOption(outputFilePath);
-
-		Option overwrite = new Option("f", "overwrite-output-file-if-required", false, "Overwrite output file if it already exists");
-		overwrite.setRequired(false);
-		options.addOption(overwrite);
+		// Define the options
+		Options options = getOptions();
 
 		HelpFormatter formatter = new HelpFormatter();
 		CommandLine cmd;
 
+		// Parse the input arguments. Print usage in case of error
 		try {
 			CommandLineParser parser = new DefaultParser();
 			cmd = parser.parse(options, args);
@@ -67,6 +46,8 @@ public class ApparelDiscountCalculatorApplication {
 			return;
 		}
 
+		// Read the command line argument values to local variables. Set default values
+		// for optional arguments like brand discount file and category discount file
 		String orderFile = cmd.getOptionValue("orders");
 		String productCatalogueFile = cmd.getOptionValue("products");
 		String categoriesAndDiscountsFile = cmd.getOptionValue("categories-and-discounts");
@@ -81,8 +62,10 @@ public class ApparelDiscountCalculatorApplication {
 		if (null == outputFileName)
 			outputFileName = DEFAULT_DISCOUNTED_PRICES_FILE;
 
-		boolean overwriteOutputFile = (null != overwrite) ? true : false;
+		boolean overwriteOutputFile = cmd.hasOption(OVERWRITE_OUTPUT_FILE_SHORT_NOTATION);
 
+		// If output file already exists and the overwrite flag is not set, then print
+		// error message and exit
 		File outputFile = new File(outputFileName);
 		if (outputFile.exists() && !overwriteOutputFile) {
 			System.out.println(String.format("output file[%s] exists already. Please set the -f flag to overwrite the output file.", outputFileName));
@@ -91,14 +74,17 @@ public class ApparelDiscountCalculatorApplication {
 			return;
 		}
 
+		// Calculate the discount price
 		List<Integer> discountPrices = DiscountCalculator.getDiscountPrices(orderFile, productCatalogueFile, categoriesAndDiscountsFile,
 				brandsAndDiscountsFile);
 
+		// Print the discount price in console
 		if (!CollectionUtils.isEmpty(discountPrices))
 			for (Integer discountedPrice : discountPrices) {
 				System.out.println(discountedPrice);
 			}
 
+		// Print the discount price to log file
 		try (FileWriter writer = new FileWriter(outputFile, false); BufferedWriter out = new BufferedWriter(writer);) {
 			if (!CollectionUtils.isEmpty(discountPrices))
 				for (Integer discountedPrice : discountPrices) {
@@ -114,5 +100,38 @@ public class ApparelDiscountCalculatorApplication {
 			return;
 		}
 
+	}
+
+	private static Options getOptions() {
+		Options options = new Options();
+
+		Option orderFilePath = getOption("o", "orders", true, "Order file", true);
+		options.addOption(orderFilePath);
+
+		Option productCatalogueFilePath = getOption("p", "products", true, "Product catalogue File", true);
+		options.addOption(productCatalogueFilePath);
+
+		Option categoriesFilePath = getOption("c", "categories-and-discounts", true,
+				"Categories and discounts File. If this field is not provided then default category discount file will be used.", false);
+		options.addOption(categoriesFilePath);
+
+		Option brandFilePath = getOption("b", "brands-and-discounts", true,
+				"Brands and discounts file. If this field is not provided then default brand discount file will be used.", false);
+		options.addOption(brandFilePath);
+
+		Option outputFilePath = getOption("t", "target-file", true,
+				"Output file with the discounted prices. If this field is not provided then defaults to a file named discounted-prices.txt in current directory",
+				false);
+		options.addOption(outputFilePath);
+
+		Option overwrite = getOption(OVERWRITE_OUTPUT_FILE_SHORT_NOTATION, "overwrite-output-file", false, "Overwrite output file if it already exists", false);
+		options.addOption(overwrite);
+		return options;
+	}
+
+	private static Option getOption(String shortOption, String longOption, boolean hasArg, String description, boolean isRequired) {
+		Option overwrite = new Option(shortOption, longOption, hasArg, description);
+		overwrite.setRequired(isRequired);
+		return overwrite;
 	}
 }

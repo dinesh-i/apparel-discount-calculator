@@ -7,7 +7,12 @@ import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class BrandDiscountReader {
+
+	private static final Logger logger = LoggerFactory.getLogger(BrandDiscountReader.class);
 
 	public static Map<String, Integer> read(String fileName) {
 		try (Stream<String> stream = Files.lines(Paths.get(fileName)).filter(line -> !line.startsWith("#"))) {
@@ -18,9 +23,10 @@ public class BrandDiscountReader {
 
 		} catch (IOException e) {
 			e.printStackTrace();
+			logger.error("Exception[%s] in reading the brand discount file", e.getMessage());
+			throw new RuntimeException(e);
 		}
 
-		return null;
 	}
 
 }
