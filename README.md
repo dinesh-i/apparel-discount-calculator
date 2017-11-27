@@ -25,7 +25,7 @@ mvn package
 ### How to run the application
 Application accepts command line arguments to accept the above files and few more configurations. Below is a summary of the command line arguments.
 ```
-usage: discount-calculator
+usage: java -jar target\apparel-discount-calculator-0.0.1-SNAPSHOT.jar
  -b,--brands-and-discounts <arg>          Brands and discounts file. If this field is not provided then
                                           default brand discount file will be used.
  -c,--categories-and-discounts <arg>      Categories and discounts File. If this field is not provided
@@ -39,6 +39,8 @@ usage: discount-calculator
 ```
 Below is a sample usage
 ```
+mvn package
+
 java -jar target\apparel-discount-calculator-0.0.1-SNAPSHOT.jar -o src/test/resources/order.csv -p src/test/resources/product-catalogue.csv -f
 ```
 
