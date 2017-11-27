@@ -94,6 +94,33 @@ Provogue,20
 2140
 ```
 
+### Source Code Highlights
+```
+DiscountCalculator - The core business logic to compute the discounted price of Apparels
+OrderReader - Reads the order file
+CatalogueReader - Reads the catalogue file
+```
+#### Note: Below 2 files are not part of the original requirement to be configurable. But implemented them as configurable files to enable more flexibility:
+```
+CategoriesReader - Reads the category and discount file
+BrandDiscountReader - Reads the brand and discount file
+```
+
+#### Note: The format of each of the file should be maintained whenever each of these files are modified. Otherwise, the processing will result in error.
+```
+TreeUtil and Node - Tree structure is used to compute ancestor discount
+ApparelDiscountCalculatorApplication - Entry point of the application where the command line arguments are parsed.
+```
+#### Note: Apache commons-cli is used to parse the command line parameters.
+
+
+### How to ensure code works fine?
+The functionality of each of the classes(except ApparelDiscountCalculatorApplication) have a corresponding test file in src/test/java. Please run those test cases where the expected result is asserted.
+
+The Test Suite "AllTests.java" covers each of the test cases.
+
+
+
 ## References
 ### Requirement
 Discounts on apparel
